@@ -9,7 +9,7 @@ use App\Models\Project;
 class ProjectController extends Controller
 {
     public function index(){
-        $projects = Project::with('type')->get();
+        $projects = Project::with('type','technologies','user')->get();
         $data = [
             'results'=> $projects,
             'success'=> true,
