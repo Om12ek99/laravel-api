@@ -97,6 +97,7 @@ class ProjectController extends Controller
     {
         $types = Type::all();
         $technologies = Technology::all();
+        
         // dd($newProject->technologies);
         return view('admin.project.edit', compact('newProject', 'types', 'technologies'));
     }
@@ -108,7 +109,12 @@ class ProjectController extends Controller
     {
         $data = $request->validated();
         $data['slug'] = Str::slug($data['title']);
-
+        if ($request->hasFile('image')) {
+            // Salvo il file nel storage e mi crea una nuova cartella in public chiamata wine_images
+            $image_path = Storage::put('cover_images', $request->image);
+            // salvo il path del file nei dati da inserire nel daabase
+            $data['cover_image'] = $image_path;
+        }
         $newProject->update($data);
 
         // Sync the technologies
